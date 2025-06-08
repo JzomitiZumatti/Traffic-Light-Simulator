@@ -8,30 +8,45 @@ public class Menu {
     }
 
     public void call() {
-        String chooseOption;
+        System.out.println(Message.MSG_1);
+        TrafficManager trafficManager = createTrafficManagerFromUserInput();
+        int chooseOption;
         boolean isOn = true;
         do {
-            printMenu();
-            chooseOption = scanner.nextLine();
+            System.out.println(Message.MSG_2);
+            chooseOption = inputChecker();
             switch (chooseOption) {
-                case "1":
-                    break;
-                case "2":
-                    break;
-                case "3":
-                    break;
-                case "0":
+                case 1 -> trafficManager.addRoad();
+                case 2 -> trafficManager.deleteRoad();
+                case 3 -> trafficManager.openSystem();
+                case 0 -> {
                     isOn = false;
-                    break;
-                default:
-                    System.out.println(Message.MSG_3);
+                    System.out.println(Message.MSG_11);
+                }
+                default -> System.out.println(Message.MSG_3);
             }
         } while (isOn);
     }
 
-    private void printMenu() {
-        System.out.println(Message.MSG_1);
-        System.out.println(Message.MSG_2);
+    private TrafficManager createTrafficManagerFromUserInput() {
+        System.out.print(Message.MSG_4);
+        int roads = inputChecker();
+
+        System.out.print(Message.MSG_5);
+        int interval = inputChecker();
+
+        return new TrafficManager(roads, interval);
     }
 
+    private int inputChecker() {
+        Integer input = null;
+        while (input == null) {
+            try {
+                input = Integer.parseInt(scanner.nextLine());
+            } catch (NumberFormatException e) {
+                System.out.println("Wrong input! Try again!");
+            }
+        }
+        return input;
+    }
 }
