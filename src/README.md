@@ -1,58 +1,40 @@
-# Traffic Light Simulator – Stage 2: Set up the traffic light
+# Traffic Light Simulator – Stage 3: Oops, wrong button
 
 ---
 
 ## 🧠 Description
 
-What is a system without parameters? The traffic light should work the way users want it. Everything is simple — provide input and get the corresponding program's output.
+What if users didn't get enough sleep? All night they controlled the movement of imaginary roads and in the morning, struggling with sleep and misclicks, enter the incorrect parameters. The system should handle wrong input and print appropriate feedback.
+
+In this stage, let's expand our program with error handling and some visual improvements.
+
+The number of roads and intervals at which the roads should open/close should be positive integer values (note, that `0` is not a positive value), so if a user provided any other input, our system should print an error that contains the `Incorrect input` and `Try` again substrings.
+
+The selected option in the menu should be either `0`, `1`, `2` or `3`, so if a user made a mistake, our system should print the `Incorrect option feedback`.
+
+To make the output of our program more convenient, we can clear the previous output after each menu option is executed. Due to the cross-platform nature of Java, clearing the console output can be complicated. You can use this snippet to remove the console output.
+
+```text
+try {
+  var clearCommand = System.getProperty("os.name").contains("Windows")
+          ? new ProcessBuilder("cmd", "/c", "cls")
+          : new ProcessBuilder("clear");
+  clearCommand.inheritIO().start().waitFor();
+}
+catch (IOException | InterruptedException e) {}
+```
+
+However, it would be difficult for users to get familiar with the result of the execution before the information is cleared, so after each operation, the program must wait for a new line to be entered before the next iteration.
+
+Note: Clearing won't work in IntelliJ IDEA console. For that to show up you'll need to run a solution from a terminal.
 
 ---
 
 ## 🎯 Objectives
 
-In this stage, after the welcoming line, ask the users to `input` the desired `number` of roads and `input` the `interval` at which the roads should open/close. After each request, read the value that a user provides.
+To complete this stage, your program must comply with the following requirements:
 
-Next, implement a looped selection menu. The loop (as well as the program execution) ends when a user selects `0` as the desired option. Any other option (`1`, `2`, `3`) prints an informational text on the action performed (`add`, `delete`, `system`) for each option.
+- If the provided input for the number of roads or interval is not a positive integer value, the program should print a line, containing `Incorrect input` and `again` substrings, followed by a new input.
+- If the chosen option is something other than `0`, `1`, `2`, or `3`, the program should output an `Incorrect option` feedback.
+- Modify the infinite loop so that when the result of option execution is shown, the program requires any input before the next iteration.
 
----
-
-
-## 📌 Example
-
-The greater-than symbol followed by a space (> ) represents the user input. Note that it's not part of the input.
-
-Example 1:
-
-```text
-Welcome to the traffic management system!
-Input the number of roads: > 5
-Input the interval: > 3
-Menu:
-1. Add road
-2. Delete road
-3. Open system
-0. Quit
-> 1
-Road added
-Menu:
-1. Add road
-2. Delete road
-3. Open system
-0. Quit
-> 2
-Road deleted
-Menu:
-1. Add road
-2. Delete road
-3. Open system
-0. Quit
-> 3
-System opened
-Menu:
-1. Add road
-2. Delete road
-3. Open system
-0. Quit
-> 0
-Bye!
-```

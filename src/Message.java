@@ -6,15 +6,16 @@ public enum Message {
             2. Delete
             3. System
             0. Quit"""),
-    MSG_3("You select wrong option! Try again!"),
-    MSG_4("Input the number of roads: "),
-    MSG_5("Input the interval: "),
-    MSG_6("Road added"),
-    MSG_7("Road deleted"),
-    MSG_8("No more roads to delete!"),
-    MSG_9("System opened"),
-    MSG_10("System already opened"),
-    MSG_11("Bye!");
+    MSG_3("Error! Incorrect Input. Try again: "),
+    MSG_4("Incorrect option"),
+    MSG_5("Input the number of roads: "),
+    MSG_6("Input the interval: "),
+    MSG_7("Road added"),
+    MSG_8("Road deleted"),
+    MSG_9("No more roads to delete!"),
+    MSG_10("System opened"),
+    MSG_11("System already opened"),
+    MSG_12("Bye!");
 
     private final String message;
 
