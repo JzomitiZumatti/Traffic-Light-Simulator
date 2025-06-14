@@ -1,7 +1,7 @@
 public class TrafficManager {
     private int roads;
     private final int interval;
-    private boolean systemOpen;
+    private State currentState = State.NOT_STARTED;
 
 
     public TrafficManager(int roads, int interval) {
@@ -23,12 +23,19 @@ public class TrafficManager {
         }
     }
 
-    public void openSystem() {
-        if (systemOpen) {
-            System.out.println(Message.MSG_11);
-        } else {
-            systemOpen = true;
-            System.out.println(Message.MSG_10);
-        }
+    public int getRoads() {
+        return roads;
+    }
+
+    public int getInterval() {
+        return interval;
+    }
+
+    public State getCurrentState() {
+        return currentState;
+    }
+
+    public void setCurrentState(State currentState) {
+        this.currentState = currentState;
     }
 }
