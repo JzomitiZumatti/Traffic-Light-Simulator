@@ -1,40 +1,39 @@
-# Traffic Light Simulator – Stage 3: Oops, wrong button
+# Traffic Light Simulator – Stage 4: Like a clockwork
 
 ---
 
 ## 🧠 Description
 
-What if users didn't get enough sleep? All night they controlled the movement of imaginary roads and in the morning, struggling with sleep and misclicks, enter the incorrect parameters. The system should handle wrong input and print appropriate feedback.
+Creating a whole system at once is challenging, so we will start with a simple stopwatch in the new thread.
 
-In this stage, let's expand our program with error handling and some visual improvements.
+Let's assume that our program has three possible states:
 
-The number of roads and intervals at which the roads should open/close should be positive integer values (note, that `0` is not a positive value), so if a user provided any other input, our system should print an error that contains the `Incorrect input` and `Try` again substrings.
+Not Started — the state until the initial settings have been provided;
+Menu — the state we worked with earlier. It shows possible options and processes the user's input;
+System — the state that shows the user information about our traffic light, such as time from startup and initial settings for now.
+When the user provided input for initial settings (both the number of roads and the interval), create a new thread to implement the System state. Name it as QueueThread by calling its setName() method with the corresponding string argument. The actions this newly-created thread should perform for now each second are:
 
-The selected option in the menu should be either `0`, `1`, `2` or `3`, so if a user made a mistake, our system should print the `Incorrect option feedback`.
+Increasing the variable that corresponds to the amount of time since the "system startup" each second (1000 milliseconds);
+(if in System state) Printing the system information.
+Let's add new functionality to the Open system menu option. By choosing 3 option in Menu, the program switches to the System state, and the main thread waits for input from the user. To return to the Menu state, the user should press Enter, in other words, an empty string should be provided as input.
 
-To make the output of our program more convenient, we can clear the previous output after each menu option is executed. Due to the cross-platform nature of Java, clearing the console output can be complicated. You can use this snippet to remove the console output.
+Example of system information output:
 
 ```text
-try {
-  var clearCommand = System.getProperty("os.name").contains("Windows")
-          ? new ProcessBuilder("cmd", "/c", "cls")
-          : new ProcessBuilder("clear");
-  clearCommand.inheritIO().start().waitFor();
-}
-catch (IOException | InterruptedException e) {}
+! 3s. have passed since system startup !
+! Number of roads: 1 !
+! Interval: 1 !
+! Press "Enter" to open menu !
 ```
-
-However, it would be difficult for users to get familiar with the result of the execution before the information is cleared, so after each operation, the program must wait for a new line to be entered before the next iteration.
-
-Note: Clearing won't work in IntelliJ IDEA console. For that to show up you'll need to run a solution from a terminal.
-
 ---
 
 ## 🎯 Objectives
 
-To complete this stage, your program must comply with the following requirements:
+Implement the System state as described above and set its thread name as `QueueThread`. While your program is in the System state, the output should contain the following information, updated (printing out) each second:
 
-- If the provided input for the number of roads or interval is not a positive integer value, the program should print a line, containing `Incorrect input` and `again` substrings, followed by a new input.
-- If the chosen option is something other than `0`, `1`, `2`, or `3`, the program should output an `Incorrect option` feedback.
-- Modify the infinite loop so that when the result of option execution is shown, the program requires any input before the next iteration.
-
+- The line that shows the time since the program's start (contains only one integer — the number of seconds);
+- The line that indicates the number of roads provided by the user (includes the `number` substring and only one integer — the same value that was provided in the settings);
+- The line that shows the interval provided by the user (contains the `interval` substring and only one integer — the same value that was provided in the settings);
+- The line that asks the user to press Enter to open the menu (should contain the `Enter` substring)
+- 
+When the user provided an empty input, the program should switch back to the Menu state and show the previously implemented menu.

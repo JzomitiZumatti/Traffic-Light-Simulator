@@ -1,4 +1,3 @@
-import java.io.IOException;
 import java.util.Scanner;
 
 public class Menu {
@@ -10,6 +9,10 @@ public class Menu {
 
     public void call() {
         TrafficManager trafficManager = createTrafficManagerFromUserInput();
+        SystemState systemState = new SystemState(trafficManager);
+        Thread queueThread = new Thread(systemState);
+        queueThread.setName("QueueThread");
+        queueThread.start();
         String chooseOption;
         boolean isOn = true;
         do {
@@ -20,22 +23,29 @@ public class Menu {
                     trafficManager.addRoad();
                     System.out.println();
                     scanner.nextLine();
-                    clearConsole();
+                    ConsoleUtils.clearConsole();
                 }
                 case "2" -> {
                     trafficManager.deleteRoad();
                     System.out.println();
                     scanner.nextLine();
-                    clearConsole();
+                    ConsoleUtils.clearConsole();
                 }
                 case "3" -> {
-                    trafficManager.openSystem();
-                    System.out.println();
+                    trafficManager.setCurrentState(State.SYSTEM);
                     scanner.nextLine();
-                    clearConsole();
+                    trafficManager.setCurrentState(State.MENU);
+                    ConsoleUtils.clearConsole();
                 }
                 case "0" -> {
                     isOn = false;
+                    systemState.stop();
+                    try {
+                        queueThread.join();
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
+                        System.out.println("Main thread was interrupted while waiting for QueueThread to finish.");
+                    }
                     System.out.println(Message.MSG_12);
                     System.out.println();
                 }
@@ -43,7 +53,7 @@ public class Menu {
                     System.out.println(Message.MSG_4);
                     System.out.println();
                     scanner.nextLine();
-                    clearConsole();
+                    ConsoleUtils.clearConsole();
                 }
             }
         } while (isOn);
@@ -57,7 +67,7 @@ public class Menu {
         System.out.print(Message.MSG_6);
         int interval = Integer.parseInt(checkCorrectInput());
 
-        clearConsole();
+        ConsoleUtils.clearConsole();
 
         return new TrafficManager(roads, interval);
     }
@@ -82,14 +92,5 @@ public class Menu {
             }
         }
         return input;
-    }
-
-    private void clearConsole() {
-        try {
-            var clearCommand = System.getProperty("os.name").contains("Windows")
-                    ? new ProcessBuilder("cmd", "/c", "cls")
-                    : new ProcessBuilder("clear");
-            clearCommand.inheritIO().start().waitFor();
-        } catch (IOException | InterruptedException ignored) {}
     }
 }
