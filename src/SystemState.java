@@ -21,8 +21,9 @@ public class SystemState implements Runnable {
                     ConsoleUtils.clearConsole();
                     System.out.println("! " + timePassed + "s. have passed since system startup !");
                     System.out.println("! Number of roads: " + manager.getRoads() + " !");
-                    System.out.println("! Interval: " + manager.getInterval() + " !");
-                    System.out.println("! Press \"Enter\" to open menu !");
+                    System.out.println("! Interval: " + manager.getInterval() + " !\n");
+                    manager.getAllRoads().forEach(System.out::println);
+                    System.out.println("\n! Press \"Enter\" to open menu !");
                 }
             } catch (InterruptedException ignored) {}
         }
