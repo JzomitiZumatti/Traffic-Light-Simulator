@@ -10,12 +10,11 @@ public enum Message {
     MSG_4("Incorrect option"),
     MSG_5("Input the number of roads: "),
     MSG_6("Input the interval: "),
-    MSG_7("Road added"),
-    MSG_8("Road deleted"),
-    MSG_9("No more roads to delete!"),
-    MSG_10("System opened"),
-    MSG_11("System already opened"),
-    MSG_12("Bye!");
+    MSG_7(" Added!"),
+    MSG_8(" deleted"),
+    MSG_9("Queue is empty"),
+    MSG_10("Queue is full"),
+    MSG_11("Bye!");
 
     private final String message;
 

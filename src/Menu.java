@@ -1,3 +1,5 @@
+import java.io.PrintStream;
+import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 
 public class Menu {
@@ -5,10 +7,15 @@ public class Menu {
 
     public Menu(Scanner scanner) {
         this.scanner = scanner;
+        System.setOut(new PrintStream(System.out, true, StandardCharsets.UTF_8));
     }
 
     public void call() {
-        TrafficManager trafficManager = createTrafficManagerFromUserInput();
+        System.out.println(Message.MSG_1);
+        System.out.print(Message.MSG_5);
+        int roads = Integer.parseInt(checkCorrectInput());
+        RoadQueue roadQueue = new RoadQueue(roads);
+        TrafficManager trafficManager = createTrafficManagerFromUserInput(roads, roadQueue);
         SystemState systemState = new SystemState(trafficManager);
         Thread queueThread = new Thread(systemState);
         queueThread.setName("QueueThread");
@@ -17,23 +24,23 @@ public class Menu {
         boolean isOn = true;
         do {
             System.out.println(Message.MSG_2);
-            chooseOption = scanner.nextLine();
+            chooseOption = scanner.nextLine().trim().replace("\r", "");
             switch (chooseOption) {
                 case "1" -> {
-                    trafficManager.addRoad();
-                    System.out.println();
+                    System.out.print("Input road name: ");
+                    String roadName = scanner.nextLine().trim().replace("\r", "");
+                    trafficManager.addRoad(roadName);
                     scanner.nextLine();
                     ConsoleUtils.clearConsole();
                 }
                 case "2" -> {
                     trafficManager.deleteRoad();
-                    System.out.println();
                     scanner.nextLine();
                     ConsoleUtils.clearConsole();
                 }
                 case "3" -> {
                     trafficManager.setCurrentState(State.SYSTEM);
-                    scanner.nextLine();
+                    scanner.nextLine().trim().replace("\r", "");
                     trafficManager.setCurrentState(State.MENU);
                     ConsoleUtils.clearConsole();
                 }
@@ -46,12 +53,11 @@ public class Menu {
                         Thread.currentThread().interrupt();
                         System.out.println("Main thread was interrupted while waiting for QueueThread to finish.");
                     }
-                    System.out.println(Message.MSG_12);
+                    System.out.println(Message.MSG_11);
                     System.out.println();
                 }
                 default -> {
                     System.out.println(Message.MSG_4);
-                    System.out.println();
                     scanner.nextLine();
                     ConsoleUtils.clearConsole();
                 }
@@ -59,35 +65,31 @@ public class Menu {
         } while (isOn);
     }
 
-    private TrafficManager createTrafficManagerFromUserInput() {
-        System.out.println(Message.MSG_1);
-        System.out.print(Message.MSG_5);
-        int roads = Integer.parseInt(checkCorrectInput());
-
+    private TrafficManager createTrafficManagerFromUserInput(int roads, RoadQueue roadQueue) {
         System.out.print(Message.MSG_6);
         int interval = Integer.parseInt(checkCorrectInput());
 
         ConsoleUtils.clearConsole();
 
-        return new TrafficManager(roads, interval);
+        return new TrafficManager(roads, interval, roadQueue);
     }
 
     private String checkCorrectInput() {
         boolean isNumeric;
-        String input = scanner.nextLine();
+        String input = scanner.nextLine().trim().replace("\r", "");
         try {
-            Integer.parseInt(input.trim());
+            Integer.parseInt(input);
             isNumeric = true;
-        } catch(NumberFormatException e){
+        } catch (NumberFormatException e) {
             isNumeric = false;
         }
-        while (!isNumeric || Integer.parseInt(input) == 0 || Integer.parseInt(input) < 0) {
+        while (!isNumeric || Integer.parseInt(input) <= 0) {
             System.out.print(Message.MSG_3);
-            input = scanner.nextLine();
+            input = scanner.nextLine().trim().replace("\r", "");
             try {
-                Integer.parseInt(input.trim());
+                Integer.parseInt(input);
                 isNumeric = true;
-            } catch(NumberFormatException e){
+            } catch (NumberFormatException e) {
                 isNumeric = false;
             }
         }
