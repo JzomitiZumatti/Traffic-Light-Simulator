@@ -12,8 +12,8 @@ public class TrafficManager {
         this.roadQueue = roadQueue;
     }
 
-    public void addRoad(String roadName) {
-        roadQueue.enqueue(roadName);
+    public void addRoad(String roadName, int interval) {
+        roadQueue.enqueue(roadName, interval);
     }
 
     public void deleteRoad() {
@@ -24,7 +24,7 @@ public class TrafficManager {
         return roads;
     }
 
-    public List<String> getAllRoads() {
+    public List<Road> getAllRoads() {
         return roadQueue.getAll();
     }
 

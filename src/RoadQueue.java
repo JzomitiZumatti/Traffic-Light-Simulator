@@ -3,20 +3,20 @@ import java.util.List;
 
 public class RoadQueue {
     private final int maxSize;
-    private final String[] queueArray;
+    private final Road[] queueArray;
     private int front;
     private int rear;
     private int size;
 
     public RoadQueue(int size) {
         maxSize = size;
-        queueArray = new String[maxSize];
+        queueArray = new Road[maxSize];
         front = -1;
         rear = -1;
         this.size = 0;
     }
 
-    public void enqueue(String item) {
+    public void enqueue(String name, int interval) {
         if (size == maxSize) {
             System.out.println(Message.MSG_10);
             return;
@@ -28,10 +28,17 @@ public class RoadQueue {
         } else {
             rear = (rear + 1) % maxSize;
         }
-
-        queueArray[rear] = item;
+        Road road;
+        if (size == 0) {
+            road = new Road(name, true, interval);
+        } else {
+            int currentOpenIndex = front;
+            int currentOpenTime = queueArray[currentOpenIndex].getTimeRemaining();
+            road = new Road(name, false, currentOpenTime + interval * (size - 1));
+        }
+        queueArray[rear] = road;
         size++;
-        System.out.println(item + Message.MSG_7);
+        System.out.println(road.getName() + Message.MSG_7);
     }
 
     public void dequeue() {
@@ -40,11 +47,11 @@ public class RoadQueue {
             return;
         }
 
-        String item = queueArray[front];
+        Road road = queueArray[front];
         queueArray[front] = null;
         size--;
 
-        System.out.println(item + Message.MSG_8);
+        System.out.println(road.getName() + Message.MSG_8);
 
         if (isEmpty()) {
             front = -1;
@@ -55,12 +62,12 @@ public class RoadQueue {
 
     }
 
-    public List<String> getAll() {
+    public List<Road> getAll() {
         if (isEmpty()) {
             return List.of();
         }
 
-        List<String> result = new ArrayList<>();
+        List<Road> result = new ArrayList<>();
         int current = front;
         for (int i = 0; i < size; i++) {
             if (queueArray[current] != null) {
@@ -75,4 +82,7 @@ public class RoadQueue {
         return size == 0;
     }
 }
+
+
+
 

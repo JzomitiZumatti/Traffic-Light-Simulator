@@ -4,6 +4,7 @@ import java.util.Scanner;
 
 public class Menu {
     Scanner scanner;
+    private int interval;
 
     public Menu(Scanner scanner) {
         this.scanner = scanner;
@@ -29,7 +30,7 @@ public class Menu {
                 case "1" -> {
                     System.out.print("Input road name: ");
                     String roadName = scanner.nextLine().trim().replace("\r", "");
-                    trafficManager.addRoad(roadName);
+                    trafficManager.addRoad(roadName, interval);
                     scanner.nextLine();
                     ConsoleUtils.clearConsole();
                 }
@@ -67,7 +68,7 @@ public class Menu {
 
     private TrafficManager createTrafficManagerFromUserInput(int roads, RoadQueue roadQueue) {
         System.out.print(Message.MSG_6);
-        int interval = Integer.parseInt(checkCorrectInput());
+        interval = Integer.parseInt(checkCorrectInput());
 
         ConsoleUtils.clearConsole();
 
